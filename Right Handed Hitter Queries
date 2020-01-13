@@ -1,0 +1,160 @@
+```{r}
+
+ITtrackmanL_res <- dbSendQuery(con, "SELECT AVG(Distance) AS AvgDistanceLeftTckmn,  
+     STDEV(Distance)/SQRT(COUNT(Distance)) AS stderror,
+     AVG(Distance) - ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalLower,
+     AVG(Distance) + ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalHigher,
+     COUNT(Distance) AS InAir
+FROM dbo.Trackman
+WHERE BatterSide LIKE 'Right' AND
+    Direction > -45 AND Direction < -15
+    AND Distance NOT LIKE 'NULL' AND Angle > 10")
+
+ITtrackmanL <- dbFetch(ITtrackmanL_res)
+
+ITtrackmanC_res <- dbSendQuery(con, "SELECT AVG(Distance) AS AvgDistanceCenterTcknmn,  
+     STDEV(Distance)/SQRT(COUNT(Distance)) AS stderror,
+     AVG(Distance) - ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalLower,
+     AVG(Distance) + ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalHigher,
+     COUNT(Distance) AS InAir
+FROM dbo.Trackman
+WHERE BatterSide LIKE 'Right' AND
+    Direction > -15 AND Direction < 15
+    AND Distance NOT LIKE 'NULL' AND Angle > 10;")
+
+ITtrackmanC <- dbFetch(ITtrackmanC_res)
+
+ITtrackmanR_res <- dbSendQuery(con, "SELECT AVG(Distance) AS AvgDistanceRightTckmn,  
+     STDEV(Distance)/SQRT(COUNT(Distance)) AS stderror,
+     AVG(Distance) - ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalLower,
+     AVG(Distance) + ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalHigher,
+     COUNT(Distance) AS InAir
+FROM dbo.Trackman
+WHERE BatterSide LIKE 'Right' AND
+    Direction > 15 AND Direction < 45
+    AND Distance NOT LIKE 'NULL' AND Angle > 10;")
+
+
+ITtrackmanR <- dbFetch(ITtrackmanR_res)
+
+ITrapsodoL_res <- dbSendQuery(con, "SELECT AVG(Distance) AS AvgDistanceLeftRsdo,  
+     STDEV(Distance)/SQRT(COUNT(Distance)) AS stderror,
+     AVG(Distance) - ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalLower,
+     AVG(Distance) + ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalHigher,
+     COUNT(Distance) AS InAir 
+FROM dbo.RapsodoHitter
+INNER JOIN dbo.Player
+ON dbo.RapsodoHitter.PlayerID = dbo.Player.PlayerID
+WHERE Bats LIKE 'R' AND ((LaunchDirection LIKE '-3%.%' AND LaunchDirection NOT LIKE '-3.%' )
+    OR (LaunchDirection LIKE '-2%.%' AND LaunchDirection NOT LIKE '-2.%')
+    OR LaunchDirection LIKE '-15.%' OR LaunchDirection LIKE '-16.%'
+    OR LaunchDirection LIKE '-17.%' OR LaunchDirection LIKE '-18.%'
+    OR LaunchDirection LIKE '-19.%' OR LaunchDirection LIKE '-40.%'
+    OR LaunchDirection LIKE '-41.%' OR LaunchDirection LIKE '-42.%'
+    OR LaunchDirection LIKE '-43.%' OR LaunchDirection LIKE '-44.%')
+    AND LaunchAngle > 10;")
+
+ITrapsodoL <- dbFetch(ITrapsodoL_res)
+
+ITrapsodoC_res <- dbSendQuery(con, "SELECT 
+     AVG(Distance) AS AvgDistanceCenterRsdo,  
+     STDEV(Distance)/SQRT(COUNT(Distance)) AS stderror,
+     AVG(Distance) - ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalLower,
+     AVG(Distance) + ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalHigher,
+     COUNT(Distance) AS InAir
+FROM dbo.RapsodoHitter
+INNER JOIN dbo.Player
+ON dbo.RapsodoHitter.PlayerID = dbo.Player.PlayerID
+WHERE Bats LIKE 'R' AND (LaunchDirection LIKE '-14.%' OR LaunchDirection LIKE '-13.%'
+    OR LaunchDirection LIKE '-12.%' OR LaunchDirection LIKE '-11.%'
+    OR LaunchDirection LIKE '-10.%' OR LaunchDirection LIKE '-9.%'
+    OR LaunchDirection LIKE '-8.%' OR LaunchDirection LIKE '-7.%'
+    OR LaunchDirection LIKE '-6.%' OR LaunchDirection LIKE '-5.%'
+    OR LaunchDirection LIKE '-4.%' OR LaunchDirection LIKE '-3.%'
+    OR LaunchDirection LIKE '-2.%' OR LaunchDirection LIKE '-1.%'
+    OR LaunchDirection LIKE '-0.%' OR LaunchDirection LIKE '0.%'
+    OR LaunchDirection LIKE '1.%' OR LaunchDirection LIKE '2.%'
+    OR LaunchDirection LIKE '3.%' OR LaunchDirection LIKE '4.%'
+    OR LaunchDirection LIKE '5.%' OR LaunchDirection LIKE '6.%'
+    OR LaunchDirection LIKE '7.%' OR LaunchDirection LIKE '8.%'
+    OR LaunchDirection LIKE '9.%' OR LaunchDirection LIKE '10.%'
+    OR LaunchDirection LIKE '11.%' OR LaunchDirection LIKE '12.%'
+    OR LaunchDirection LIKE '13.%' OR LaunchDirection LIKE '14.%')
+    AND LaunchAngle > 10;")
+
+ITrapsodoC <- dbFetch(ITrapsodoC_res)
+
+ITrapsodoR_res <- dbSendQuery(con, "SELECT
+     AVG(Distance) AS AvgDistanceRightRsdo,  
+     STDEV(Distance)/SQRT(COUNT(Distance)) AS stderror,
+     AVG(Distance) - ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalLower,
+     AVG(Distance) + ((STDEV(Distance)/SQRT(COUNT(Distance)))*1.96)
+     AS IntervalHigher,
+     COUNT(Distance) AS InAir
+FROM dbo.RapsodoHitter
+INNER JOIN dbo.Player
+ON dbo.RapsodoHitter.PlayerID = dbo.Player.PlayerID
+WHERE Bats LIKE 'R' AND ((LaunchDirection LIKE '3%.%' AND LaunchDirection NOT LIKE '3.%')
+    OR (LaunchDirection LIKE '2%.%' AND LaunchDirection NOT LIKE '2.%')
+    OR LaunchDirection LIKE '15.%' OR LaunchDirection LIKE '16.%'
+    OR LaunchDirection LIKE '17.%' OR LaunchDirection LIKE '18.%'
+    OR LaunchDirection LIKE '19.%' OR LaunchDirection LIKE '40.%'
+    OR LaunchDirection LIKE '41.%' OR LaunchDirection LIKE '42.%'
+    OR LaunchDirection LIKE '43.%' OR LaunchDirection LIKE '44.%')
+    AND LaunchAngle > 10;")
+
+ITrapsodoR <- dbFetch(ITrapsodoR_res)
+
+```
+
+
+
+
+```{r}
+
+Distances <- c(ITtrackmanL$AvgDistanceLeftTckmn, ITrapsodoL$AvgDistanceLeftRsdo, ITtrackmanC$AvgDistanceCenterTcknmn, ITrapsodoC$AvgDistanceCenterRsdo, ITtrackmanR$AvgDistanceRightTckmn, ITrapsodoR$AvgDistanceRightRsdo)
+
+LowerBounds <- c(ITtrackmanL$IntervalLower, ITrapsodoL$IntervalLower, ITtrackmanC$IntervalLower, ITrapsodoC$IntervalLower, ITtrackmanR$IntervalLower, ITrapsodoR$IntervalLower)
+
+UpperBounds <- c(ITtrackmanL$IntervalHigher, ITrapsodoL$IntervalHigher, ITtrackmanC$IntervalHigher, ITrapsodoC$IntervalHigher, ITtrackmanR$IntervalHigher, ITrapsodoR$IntervalHigher)
+
+mid <- barplot(Distances)
+
+names(Distances) <- c("LeftTckmn", "LeftRsdo", "CtrTcknmn", "CtrRsdo", "RgtTckmn", "RgtRsdo")
+
+barplot(Distances, col = "dodgerblue", ylim = c(0,350), main = "Flyball Distances Amongst Right Handed Hitters")
+arrows(x0 = mid, y0 = LowerBounds, x1 = mid, y1 = UpperBounds, code = 3, angle = 90, length = 0.1)
+
+
+```
+
+
+
+```{r}
+
+Distances <- c(ITtrackmanL$AvgDistanceLeftTckmn, ITrapsodoL$AvgDistanceLeftRsdo, ITtrackmanC$AvgDistanceCenterTcknmn, ITrapsodoC$AvgDistanceCenterRsdo, ITtrackmanR$AvgDistanceRightTckmn, ITrapsodoR$AvgDistanceRightRsdo)
+
+LowerBounds <- c(ITtrackmanL$IntervalLower, ITrapsodoL$IntervalLower, ITtrackmanC$IntervalLower, ITrapsodoC$IntervalLower, ITtrackmanR$IntervalLower, ITrapsodoR$IntervalLower)
+
+UpperBounds <- c(ITtrackmanL$IntervalHigher, ITrapsodoL$IntervalHigher, ITtrackmanC$IntervalHigher, ITrapsodoC$IntervalHigher, ITtrackmanR$IntervalHigher, ITrapsodoR$IntervalHigher)
+
+mid <- barplot(Distances)
+
+names(Distances) <- c("LeftTckmn", "LeftRsdo", "CtrTcknmn", "CtrRsdo", "RgtTckmn", "RgtRsdo")
+
+barplot(Distances, col = "dodgerblue", ylim = c(0,350), main = "All Batters Flyball Distances")
+arrows(x0 = mid, y0 = LowerBounds, x1 = mid, y1 = UpperBounds, code = 3, angle = 90, length = 0.1)
+
+
+```
